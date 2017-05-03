@@ -1,1 +1,15 @@
 # Software-Development-Final-Project
+
+##Recursive Webcrawler using Curl
+
+
+This project started out extremely ambitions, but true to my personality I had got way ahead of myself too quickly.  Originally I had intended for this web crawler to traverse the darkweb, running mostly on the hardware level all while utilizing a high degree of parallelism for efficient computing.  The final project couldn't run on the hardware level or get the proper proxy configurations to even connect to darkweb. Still, it ended up working and even though it has it's issues, it hasn't completely turned me off from the world of webcrawling.  
+
+First things first, what is a webcrawler?  A webcrawler is a digital robot that traverses the web gathering information.  They are sometimes seen as nusience to system administrators, by making constant and consistent request to a webserver they can hog up valuable resources.  Most websites these days have a Robots.txt file somewhere on the server to give rules to whatever robots may stumble accross that particular domain.  Although it is considered "polite" for the crawler to listen to these rules, they are for the most part entirely optional.  Enough with the background, let's take a look at my robot.
+
+At the backbone of every robot is really two commands, <code> wget http://yousitehere.com or curl http://theothersitehere.net </code> These two commands are very similar in that they both download data from the web and send POST requests, but they are very different in other regards.  Curl is powered by a C/C++ library that supports a multitude web functionality like HTTP auth or but more importantly in my case SOCKS protocol.  A SOCKS5 proxy should've enabled me to connect to the tor browser anonymous browsing capabilities through port 9050.  When it came down to testing though, connecting to the tor network proved too slow and difficult to debug.  
+
+My actual webcrawler still used Curl to fetch html data, but used the default proxy settings.  The final project actually turned out to be two scripts, first the init script would download html data and parse out the possible addresses. These possible addresses were loaded into a queue text file and sent over to the recSearch script to see Curl deemed them valid addresses.  If a site was successfully loaded, it too was parsed with the html being loaded into the same queue file, while the valid address was then stored in another text file.  The text file of valid addresses could then be checked to make sure the queue wasn't bogged down with any duplicate addresses.  
+
+Overall I was slightly disappointed with the performance of the webcrawler.  The queue grew exponentially large while the address file appeared to grow at a snail's pace in comparison.  Some methods were attempted at parallelizing the requests but that just made the overall download rate slower.  I do believe there are some solutions to my bottlenecking issues, but it would probably take diving head first into the libcurl library for C++ in order to see some real performance gains. 
+
