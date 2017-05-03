@@ -1,0 +1,23 @@
+#!/bin/bash
+cat << HTML_TOP
+<html>
+	<head>
+	<title> Unique and Reachable URLS from the Web Crawler </title>
+	</head> 
+	<body>
+	<h3> Touched up output, fomatted with script </h3>
+
+	<table border= "3pt">
+HTML_TOP
+
+data=$1
+
+awk '{print "<tr>"; for (i=1; i<=NF; i++) print "\t<td> "length($0)"   "$1" </td>"; print "</tr>"}' $data | sort | uniq
+
+echo "$data" > out.html
+
+cat << HTML_BOT
+	</table>
+	</body>
+</html>
+HTML_BOT
