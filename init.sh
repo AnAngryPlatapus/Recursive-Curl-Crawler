@@ -4,24 +4,18 @@
 #
 #By Sam Miller
 
-
 mysite="$1"
 
-if [ !$(grep -Fxq "$mysite" goodlinks) ] && [ $mysite != "stop" ]
+if [ !$(grep -Fxq "$mysite" goodlinks) ]
 then
-	curl -s "$mysite" | sed -ne 's/.*\(http[^"]*\).*/\1/p' >> queue
+	curl -s "$mysite" | grep -o '<a href=['"'"'"][^"'"'"']*['"'"'"]' | \
+  sed -e 's/^<a href=["'"'"']//' -e 's/["'"'"']$//' >> queue
 
 	echo "Queue size:"
-	wc -l queue | tee -a qcount
-	echo "Link Number:" 
+	wc -l queue | tee -a  qcount
+	echo "Links scraped:"
 	wc -l goodlinks | tee -a lcount
-	
-	
-
-	if [[ $(echo $qcount) -gt 10 ]] 
-	then 
-		echo "stop" >> queue
-	fi
 
 	./recSearch.sh
+
 fi
